@@ -1,2 +1,2 @@
-import FacebookLoginApp from "./src/FacebookLoginApp";
+import FacebookLoginApp from "./src/Router";
 export default FacebookLoginApp;

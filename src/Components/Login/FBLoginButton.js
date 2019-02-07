@@ -1,30 +1,20 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity , Text, Image } from 'react-native';
+
 import {
   LoginManager,
+  AccessToken,
+  GraphRequest, 
+  GraphRequestManager
 } from 'react-native-fbsdk';
 
 const fbImageButton = require('../../Images/fbImageButton1.png');
 const googleImageButton = require('../../Images/googleImageButton1.png');
 
 export default class FBLoginButton extends Component {
-
     
-
-    fbLoginManager = () => {
-        LoginManager.logInWithReadPermissions(['public_profile']).then(
-            result => {
-                if (result.isCancelled) {
-                    alert('Login was cancelled');
-                } else {
-                    alert('Login was successful with permissions: '
-                    + result.grantedPermissions.toString());
-                }
-            },
-            error => {
-                alert('Login failed with error: ' + error);
-            }
-        );         
+    constructor(props) {
+        super(props);
     }
 
 
@@ -34,7 +24,7 @@ export default class FBLoginButton extends Component {
             <View>
                 <TouchableOpacity 
                     style={[styles.button, styles.fbButton]}
-                    onPress={this.fbLoginManager}>
+                    onPress={this.props.tryLogin}>
                         <Image
                             style={styles.imageButton}
                             source={fbImageButton} />                    
@@ -54,6 +44,8 @@ export default class FBLoginButton extends Component {
         );
     }
 }
+
+
 
 const styles = StyleSheet.create({
 
