@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { FACEBOOK } from '../Helpers/FacebookLoginHelper';
+import { GOOGLE } from '../Helpers/GoogleLoginHelper';
 
 const PROFILE_PIC_DIMENSION = 400;
 const urlProfilePicStart = 'https://graph.facebook.com/';
@@ -14,16 +16,41 @@ export default class Screens extends Component {
 
     render() {
         
-        const { name, email, id, user_birthday } = this.props.navigation.state.params.user;
-        const userUrlProfilePicture = urlProfilePicStart + id + urlProfilePicEnd;
+        let user = {
+            id: null,
+            name: null,
+            email: null,
+            user_birthday: null,
+            userUrlProfilePicture: null
+        };
+
+        const { userInfo } = this.props.navigation.state.params;
+        const { isLoggedWith } = userInfo;
+
+        if (isLoggedWith === FACEBOOK) {
+            user.id = userInfo.id;
+            user.name = userInfo.name;
+            user.email = userInfo.email;
+            user.userUrlProfilePicture = urlProfilePicStart + userInfo.id + urlProfilePicEnd;
+        }
+        
+        if (isLoggedWith === GOOGLE) {
+            user.id = userInfo.user.id;
+            user.name = userInfo.user.name;
+            user.email = userInfo.user.email;
+            user.userUrlProfilePicture = userInfo.user.photo;        
+        }
+            
+
+
         return (
             <View style={styles.container}> 
-                <Text style={styles.label}> { name } </Text>
+                <Text style={styles.label}> { user.name } </Text>
                 <Image
                     style={styles.avatarImage}
-                    source={{uri: userUrlProfilePicture}} />
-                <Text style={styles.label}> { email } </Text>
-                <Text style={styles.label}> { user_birthday } </Text>
+                    source={{uri: user.userUrlProfilePicture}} />
+                <Text style={styles.label}> { user.email } </Text>
+                <Text style={styles.label}> { user.user_birthday } </Text>
             </View>
         );
     }
